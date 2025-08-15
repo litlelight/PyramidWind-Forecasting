@@ -81,47 +81,6 @@ python scripts/demo_synthetic.py \
 
 The demo instantiates **Local** (patch), **Meso** (FFT-guided), and **Global** (selective SSM) branches and runs training/evaluation with small shapes to validate the code path. It also renders example diagnostics (e.g., scale-weight heatmaps) to `outputs/demo_synthetic/`.
 
----
-
-## 🗂️ Real Data (BYOD: Bring Your Own Data)
-
-We **do not** redistribute datasets. Please obtain them from official sources and set your own paths.
-
-* **SDWPF** (10-min cadence) – obtain per the original license.
-* **NREL WIND Toolkit (WIND)** (1-hour cadence) – obtain per the original license.
-
-Edit your local config (keep it private or `.gitignore` it):
-
-```yaml
-# configs/sdwpf_public.yaml  (example placeholders)
-data:
-  root: /your/local/path           # not published
-  split_file: /your/local/split.yaml
-preprocess:
-  normalize: zscore  # fit stats on train; apply to val/test
-eval:
-  horizons: [96, 192, 336, 720]    # mapping differs by cadence
-```
-
-> **Horizon mapping**:
-> SDWPF (10-min) → 16/32/56/120 hours for H=96/192/336/720.
-> WIND (1-hour) → 4/8/14/30 days for the same H.
-
----
-
-## 🚀 Training (with your own data)
-
-```bash
-python scripts/train.py \
-  --config configs/sdwpf_public.yaml \
-  --config configs/model/pyramidwind.yaml \
-  trainer.max_epochs=100 trainer.precision=16 seed=2025
-```
-
-> This public config avoids private paths and suppresses online logging.
-> Loss weights and certain hyper-parameters may be left as **documented placeholders**; adjust as needed for your environment.
-
----
 
 ## ✅ Evaluation
 
